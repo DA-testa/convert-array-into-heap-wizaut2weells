@@ -1,38 +1,55 @@
 # python3
-
-
 def build_heap(data):
+    n = len(data)
     swaps = []
-    # TODO: Creat heap and heap sort
-    # try to achieve  O(n) and not O(n2)
-
-
+    
+    def heapify(i):
+        nonlocal swaps
+        largest = i
+        left_child = 2*i + 1
+        right_child = 2*i + 2
+        
+        if left_child < n and data[left_child] < data[largest]:
+            largest = left_child
+            
+        if right_child < n and data[right_child] < data[largest]:
+            largest = right_child
+            
+        if largest != i:
+            swaps.append((i, largest))
+            data[i], data[largest] = data[largest], data[i]
+            heapify(largest)
+    
+    # Build heap
+    for i in range(n//2, -1, -1):
+        heapify(i)
+    
     return swaps
 
-
 def main():
-    
-    # TODO : add input and corresponding checks
-    # add another input for I or F 
-    # first two tests are from keyboard, third test is from a file
+    input_method=input("I or F")
+    if "I" in input_method:
+        n = int(input())
+        data = list(map(int, input().split()))
+    elif "F" in input_method:
+        file_name = input()
+        if 'a' in file_name:
+            return
+        with open (f"./tests/{file_name}", 'r') as f:
+            n = int(f.readline())
+            data = list(map(int, f.readline().split(" ")))
+    else:
+        print("Wrong input")
+        return
 
-
-    # input from keyboard
-    n = int(input())
-    data = list(map(int, input().split()))
-
-    # checks if lenght of data is the same as the said lenght
     assert len(data) == n
 
-    # calls function to assess the data 
-    # and give back all swaps
+    arr = [[] for i in range(n)]
+    for i in range(n):
+        if data[i]<n:
+            arr[data[i]].append(i)
     swaps = build_heap(data)
 
-    # TODO: output how many swaps were made, 
-    # this number should be less than 4n (less than 4*len(data))
-
-
-    # output all swaps
     print(len(swaps))
     for i, j in swaps:
         print(i, j)
